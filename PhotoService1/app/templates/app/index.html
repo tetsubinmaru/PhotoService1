@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <title>写真投稿サイト</title>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1><a href="{% url 'app:index' %}"></a>写真投稿サイト</h1>
-            <div class="header-menu">
-                <a href="">投稿</a>
-            </div>
-        </div>
-    </header>
-    <div class="container">
-        <h2>トップページ</h2>
-    </div>
-</body>
-</html>
+{% extends 'app/base.html' %}
+
+{% block content %}
+<h2>トップページ</h2>
+
+{% for photo in photos %}
+    <img src="{{ photo.image.url }}" class="photo-img">
+{% endfor %}
+
+{% endblock %}
