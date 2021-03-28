@@ -4,8 +4,17 @@
 
 <h2 class="user-name">@{{ user.username }}</h2>
 
-{% for photo in photos %}
-    <img src="{{ photo.image.url }}" class="photo-img">
-{% endfor %}
+{% if photos.count != 0 %}
+    <p>投稿<strong>{{ photos.count }}</strong>件</p>
+{% else %}
+    {% if user == request.user %}
+        <p>はじめての投稿をしてみましょう！</p>
+    {% else %}
+        <p>@{{ user.username }}さんはまだ投稿していません。</p>
+    {% endif %}
+{% endif %}
+
+<!-- photos_list.htmlを読み込んで写真一覧を表示する -->
+{% include 'app/photos_list.html' %}
 
 {% endblock %}

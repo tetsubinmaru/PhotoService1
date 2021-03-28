@@ -4,8 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 from .forms import PhotoForm
-from .models import Photo
+from .models import Photo, Category
 
 
 
@@ -55,3 +56,20 @@ def photos_new(request):
     else:
         form = PhotoForm()
     return render(request, 'app/photos_new.html', {'form': form})
+
+def  photos_detail(request, pk):
+    photo = get_object_or_404(Photo, pk=pk)
+    return render(request, 'app/photos_detail.html', {'photo': photo})
+
+@require_POST
+def photos_delete(request, pk):
+    photo = get_object_or_404(Photo, pk=pk, user=request.user)
+    photos_delete()
+    return redirect(request, 'app:users_detail', request.user.id)
+
+def photos_category(request, category):
+    # titleがURLの文字列と一致するCategoryインスタンスを取得
+    category = get_object_or_404(Category, title=category)
+    # 取得したCategoryに属するPhoto一覧を取得
+    photos = Photo.objects.filter(category=category).order_by('-created_at')
+    return render(request, 'app/index.html', {'photos': photos, 'category': category})
